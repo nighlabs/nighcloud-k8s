@@ -1,0 +1,5 @@
+controlplane.yaml
+kubeconfig
+talosconfig
+worker.yaml
+**/_out/**

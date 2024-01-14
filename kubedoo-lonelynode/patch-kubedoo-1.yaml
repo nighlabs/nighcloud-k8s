@@ -1,0 +1,22 @@
+machine:
+  network:
+    interfaces:
+      - interface: enxbc241136f337
+        dhcp: false
+        addresses:
+          - 172.16.1.41/24
+        vip:
+          ip: 172.16.1.40
+      - interface: enxbc2411bfc8ec
+        dhcp: false
+        addresses:
+          - 172.30.255.41/24
+        mtu: 8996
+    hostname: kubedoo-1
+    nameservers:
+        - 172.16.1.254
+cluster:
+  allowSchedulingOnControlPlanes: true
+  etcd:
+    advertisedSubnets:
+      - 172.16.1.0/24
