@@ -16,3 +16,11 @@ Each of the folders represents a cluster.  The only files generally checked into
     ```
 - Bootstrap one of the control plane nodes: `talosctl bootstrap`
 - Grab the kubeconfig: `talosctl kubeconfig .`
+
+# References
+Here's a list of the articles that I've recommended to mark as a source I'm consuming as reference.
+- https://www.talos.dev/v1.6/talos-guides/configuration/patching/
+- https://www.talos.dev/v1.6/talos-guides/howto/workers-on-controlplane/
+- https://www.talos.dev/v1.6/kubernetes-guides/network/deploying-cilium/
+- https://datavirke.dk/posts/bare-metal-kubernetes-part-2-cilium-and-firewalls/
+- https://datavirke.dk/posts/bare-metal-kubernetes-part-1-talos-on-hetzner/
