@@ -20,3 +20,8 @@ cluster:
   etcd:
     advertisedSubnets:
       - 172.16.1.0/24
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true      
