@@ -15,11 +15,11 @@ The overall step of what I'm envisioning will take the following steps to create
 - ☑️ Flux CD -> Cert Manager
 - ☑️ Flux CD -> Vault
 
-## Commands used
+## Create the host machines and bootstrap K8s
 - Create a talos configuration for the cluster: `talosctl gen config kubedoo-lonelynode https://172.16.1.40:6443`
-- Create a talos machine configuration: `talosctl machineconfig patch controlplane.yaml --patch @patch-kubedoo-1.yaml -o ./_out/kubedoo-1.yaml`
+- Create a talos machine configuration: `talosctl machineconfig patch controlplane.yaml --patch @patch-kubedoo-1.yaml -o ./_talos/_out/kubedoo-1.yaml`
 - Boot the machine - set it's IP to 172.16.1.41
-- Apply the machine configuration: `talosctl apply-config --insecure -n 172.16.1.41 --file ./_out/kubedoo-1.yaml`
+- Apply the machine configuration: `talosctl apply-config --insecure -n 172.16.1.41 --file ./_talos/_out/kubedoo-1.yaml`
 - Bootstrap one of the control plane nodes: `talosctl bootstrap --nodes 172.16.1.41 --endpoints 172.16.1.41 --talosconfig=./talosconfig`
 - Grab the kubeconfig: `talosctl kubeconfig --nodes 172.16.1.40 --endpoints 172.16.1.40 --talosconfig ./talosconfig`
 - Install Cilium CNI
@@ -28,7 +28,24 @@ The overall step of what I'm envisioning will take the following steps to create
     helm install cilium cilium/cilium \
         --version 1.14.5 \
         --namespace kube-system \
-        -f cilium-values.yaml
+        -f ./_talos/cilium-values.yaml
 ```
 - Test cilium: `cilium status`
 - Test nodes: `kubectl --kubeconfig=./kubeconfig get nodes`
+
+## Add a deployment key to the github repo
+Flux will need access to the github repo.  The goal will be to use SSH and a deployment key on the repo.  This will allow Flux to access it.  I anticipate using the image updating so it'll need write access.
+- Generate the SSH Key: `ssh-keygen -t ed25519 -C "nighcloud - kubedoo-lonelynode"`
+- Add it as a deployment key in Github on the Repository.  For my purposes, I set it with write access.
+
+## Deploy FluxCD to the Cluster
+Now install and bootstrap Flux.
+- Bootstrap flux:
+    ```
+    flux bootstrap git \
+        --url=ssh://git@github.com/nighlabs/nighcloud-k8s \
+        --branch=main \
+        --private-key-file=/Users/chris/.ssh/kubedoo-lonelynode \
+        --password=REPLACEME \
+        --path=clusters/kubedoo-lonelynode
+    ```
