@@ -9,7 +9,7 @@ The overall step of what I'm envisioning will take the following steps to create
 - ✅ Github storage for configuration
 - ✅ Install Cilium
 - ✅ Flux CD
-- ☑️ Flux CD -> Backport Cilium
+- ✅ Flux CD -> Backport Cilium
 - ☑️ Flux CD -> Secured Secrets
 - ☑️ Flux CD -> Ingress
 - ☑️ Flux CD -> Rook Ceph w/ External Ceph
