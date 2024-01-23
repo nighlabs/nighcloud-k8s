@@ -41,7 +41,7 @@ Flux will need access to the github repo.  The goal will be to use SSH and a dep
 
 ## Deploy FluxCD to the Cluster
 Now install and bootstrap Flux.
-- Bootstrap flux:
+- Bootstrap flux - take care, everything in clusters/kubedoo-lonely node is injested by Flux:
     ```
     flux bootstrap git \
         --url=ssh://git@github.com/nighlabs/nighcloud-k8s \
