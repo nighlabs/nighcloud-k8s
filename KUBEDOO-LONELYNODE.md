@@ -10,11 +10,19 @@ The overall step of what I'm envisioning will take the following steps to create
 - ✅ Install Cilium
 - ✅ Flux CD
 - ✅ Flux CD -> Backport Cilium
-- ☑️ Flux CD -> Secured Secrets
+- ☑️ Flux CD -> HCP Vault Secrets w/ vault-secrets-operator
 - ☑️ Flux CD -> Ingress
 - ☑️ Flux CD -> Rook Ceph w/ External Ceph
 - ☑️ Flux CD -> Cert Manager
 - ☑️ Flux CD -> Vault
+- ☑️ Flux CD -> Cloudflare Tunnels
+
+## Secrets discussion
+Overall, there's several styles of secrets for FluxCD: SOPS, Sealed Secrets.  Both SOPS and Sealed Secrets allow you to take files with secrets in them and encrypt/decrypt the sensitive data.  The cypher text is then stored inside of the files before checking them into GitHub.
+
+I liked the options of those but was still uncomfortable storing secrets encrypted in GitHub.  But why?  I have no worries about encrypted secrets for services that would not be accessible from the internet.  These would have a second step to use a cracked secret.  My concern comes for the encrypted secrets which are used for cloud services (Cloudflare API, etc).
+
+As a result, I continued searching.  I love Hashicorp Vault as it allows for secure storage of secrets.  However, for the cluster, I end up with a 🐓/🥚 problem in that I can't use Vault if I haven't create the Vault.  Enter Hashicorp Vault Secrets!  It's a cloud platform which offers a key/value store for secrets.  When paired with their secrets operator, the secrets can be synchronized to secrets in k8s.  This allows for secrets separated from the GitHub repo.  The drawback of this philosophy is that there's small parts of the k8s manifests; however, I believe this is a good trade-off to security of the secrets.
 
 ## Create the host machines and bootstrap K8s
 - Create a talos configuration for the cluster: `talosctl gen config kubedoo-lonelynode https://172.16.1.40:6443`
