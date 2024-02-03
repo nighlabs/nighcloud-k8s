@@ -10,7 +10,7 @@ The overall step of what I'm envisioning will take the following steps to create
 - ✅ Install Cilium
 - ✅ Flux CD
 - ✅ Flux CD -> Backport Cilium
-- ☑️ Flux CD -> HCP Vault Secrets w/ vault-secrets-operator
+- ✅ Flux CD -> HCP Vault Secrets w/ vault-secrets-operator
 - ☑️ Flux CD -> Ingress
 - ☑️ Flux CD -> Rook Ceph w/ External Ceph
 - ☑️ Flux CD -> Cert Manager
@@ -58,3 +58,32 @@ Now install and bootstrap Flux.
         --password=REPLACEME \
         --path=clusters/kubedoo-lonelynode
     ```
+
+## Configure initial secrets for vault-secrets-operator
+We'll need to provide an initial secret for the vault secrets operator to be able to authenticate to Vault Secrets in HCP Cloud.
+
+First create a service principal in HCP Vault Secrets and setup env for them (NOTE: turn off shell history... fp -c in macos)
+```
+export HCP_CLIENT_ID=
+export HCP_CLIENT_SECRET=
+export HCP_ORG_ID=
+export HCP_PROJECT_ID=
+export APP_NAME=
+```
+
+Load the Org ID and Project ID into the Vault Secrets Operator namespace
+```
+kubectl create -f - <<EOF
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: HCPAuth
+metadata:
+  name: default
+  namespace: vault-secrets-op
+spec:
+  organizationID: $HCP_ORG_ID
+  projectID: $HCP_PROJECT_ID
+  servicePrincipal:
+    secretRef: vault-secrets-op-sp
+EOF
+```

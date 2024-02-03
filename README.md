@@ -13,3 +13,4 @@ Here's a list of the articles that I've recommended to mark as a source I'm cons
 - https://www.talos.dev/v1.6/kubernetes-guides/network/deploying-cilium/
 - https://datavirke.dk/posts/bare-metal-kubernetes-part-2-cilium-and-firewalls/
 - https://datavirke.dk/posts/bare-metal-kubernetes-part-1-talos-on-hetzner/
+- https://developer.hashicorp.com/vault/tutorials/hcp-vault-secrets-get-started/kubernetes-vso
