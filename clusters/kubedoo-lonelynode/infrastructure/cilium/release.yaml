@@ -53,3 +53,17 @@ spec:
       hostRoot: /sys/fs/cgroup
     k8sServiceHost: localhost
     k8sServicePort: 7445
+    l2announcements:
+      enabled: true
+    k8sClientRateLimit:
+      qps: 5 # Default - tune later if needed
+      burst: 10 # Default - tune later if needed
+---
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: CiliumL2AnnouncementPolicyDefault
+  namespace: kube-system
+spec:
+  externalIPs: true
+  loadBalancerIPs: false # Typically only use one or two IPs. No need for Cilium LB IPAM etc.
