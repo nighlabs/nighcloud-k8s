@@ -11,7 +11,8 @@ The overall step of what I'm envisioning will take the following steps to create
 - ✅ Flux CD
 - ✅ Flux CD -> Backport Cilium
 - ✅ Flux CD -> HCP Vault Secrets w/ vault-secrets-operator
-- ☑️ Flux CD -> Ingress
+- 🟢 Flux CD -> Cilium as L2 Load Balancer
+- ☑️ Flux CD -> Ingress (Envoy)
 - ☑️ Flux CD -> Rook Ceph w/ External Ceph
 - ☑️ Flux CD -> Cert Manager
 - ☑️ Flux CD -> Vault
