@@ -3,3 +3,4 @@ kubeconfig
 talosconfig
 worker.yaml
 **/_out/**
+localdev/**
