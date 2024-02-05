@@ -62,7 +62,7 @@ spec:
 apiVersion: "cilium.io/v2alpha1"
 kind: CiliumL2AnnouncementPolicy
 metadata:
-  name: ciliumL2AnnouncementPolicyDefault
+  name: cilium-l2-announcement-polciy-default
   namespace: kube-system
 spec:
   externalIPs: true
