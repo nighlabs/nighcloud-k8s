@@ -63,27 +63,13 @@ Now install and bootstrap Flux.
 ## Configure initial secrets for vault-secrets-operator
 We'll need to provide an initial secret for the vault secrets operator to be able to authenticate to Vault Secrets in HCP Cloud.
 
-First create a service principal in HCP Vault Secrets and setup env for them (NOTE: turn off shell history... fp -c in macos)
+First create a service principal in HCP Vault Secrets and setup env for them (NOTE: turn off shell history... `fc -p` in macos).  Then create the k8s secret
 ```
 export HCP_CLIENT_ID=
 export HCP_CLIENT_SECRET=
-```
 
-Create the cert-manager secret bootstrap
-```
-kubectl create -f - <<EOF
-apiVersion: secrets.hashicorp.com/v1beta1
-kind: HCPVaultSecretsApp
-metadata:
-  name: hcp-cert-manager-bootstrap-authsp
-  namespace: cert-manager
-spec:
-  appName: cert-manager-bootstrap
-  destination:
-    create: true
-    labels:
-      hvs: "true"
-    name: hcp-cert-manager-bootstrap-authsp
-  refreshAfter: 24h
-EOF
+kubectl create secret generic hcp-vso-serviceprincipal \
+    --namespace cert-manager \
+    --from-literal=clientID=$HCP_CLIENT_ID \
+    --from-literal=clientSecret=$HCP_CLIENT_SECRET
 ```

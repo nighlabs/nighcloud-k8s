@@ -4,7 +4,7 @@ This is my cheatsheet of how I tested the Vault Secrets Operator.  It assumes yo
 ## Steps
 We'll need to provide an initial secret for the vault secrets operator to be able to authenticate to Vault Secrets in HCP Cloud.
 
-First create a service principal in HCP Vault Secrets and setup env for them (NOTE: turn off shell history... `fp -c` in macos)
+First create a service principal in HCP Vault Secrets and setup env for them (NOTE: turn off shell history... `fc -p` in macos)
 ```
 export HCP_CLIENT_ID=
 export HCP_CLIENT_SECRET=
