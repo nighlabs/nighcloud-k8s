@@ -5,7 +5,7 @@ metadata:
   name: envoy
   namespace: envoy-gateway-system
 spec:
-  interval: 30d
+  interval: 24h
   type: oci
   url: oci://registry-1.docker.io/envoyproxy
 ---
