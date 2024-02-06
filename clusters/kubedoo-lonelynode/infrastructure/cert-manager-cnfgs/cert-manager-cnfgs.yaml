@@ -1,0 +1,45 @@
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: HCPAuth
+metadata:
+  name: hcp-cert-manager-bootstrap
+  namespace: cert-manager
+spec:
+  organizationID: 99c837bc-5c41-4547-be96-af1367af26d6
+  projectID: aa5797fb-5ef6-4b6e-a95b-6974f49133e1
+  servicePrincipal:
+    secretRef: hcp-cert-manager-bootstrap-authsp
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: ideal.tea7306@thenigh.com
+    privateKeySecretRef:
+      name: letsencrypt-staging
+    solvers:
+    - dns01:
+        cloudflare:
+          apiTokenSecretRef:
+            name: cloudflare-bootstrap
+            key: cloudflare_access
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-production
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: ideal.tea7306@thenigh.com
+    privateKeySecretRef:
+      name: letsencrypt-production
+    solvers:
+    - dns01:
+        cloudflare:
+          apiTokenSecretRef:
+            name: cloudflare-bootstrap
+            key: cloudflare_access

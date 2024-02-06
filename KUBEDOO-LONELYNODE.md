@@ -11,10 +11,10 @@ The overall step of what I'm envisioning will take the following steps to create
 - ✅ Flux CD
 - ✅ Flux CD -> Backport Cilium
 - ✅ Flux CD -> HCP Vault Secrets w/ vault-secrets-operator
-- 🟢 Flux CD -> Cilium as L2 Load Balancer
-- ☑️ Flux CD -> Ingress (Envoy)
+- ✅ Flux CD -> Cilium as L2 Load Balancer
+- ✅ Flux CD -> Ingress (Envoy)
 - ☑️ Flux CD -> Rook Ceph w/ External Ceph
-- ☑️ Flux CD -> Cert Manager
+- ✅ Flux CD -> Cert Manager
 - ☑️ Flux CD -> Vault
 - ☑️ Flux CD -> Cloudflare Tunnels
 
@@ -67,24 +67,23 @@ First create a service principal in HCP Vault Secrets and setup env for them (NO
 ```
 export HCP_CLIENT_ID=
 export HCP_CLIENT_SECRET=
-export HCP_ORG_ID=
-export HCP_PROJECT_ID=
-export APP_NAME=
 ```
 
-Load the Org ID and Project ID into the Vault Secrets Operator namespace
+Create the cert-manager secret bootstrap
 ```
 kubectl create -f - <<EOF
----
 apiVersion: secrets.hashicorp.com/v1beta1
-kind: HCPAuth
+kind: HCPVaultSecretsApp
 metadata:
-  name: default
-  namespace: vault-secrets-op
+  name: hcp-cert-manager-bootstrap-authsp
+  namespace: cert-manager
 spec:
-  organizationID: $HCP_ORG_ID
-  projectID: $HCP_PROJECT_ID
-  servicePrincipal:
-    secretRef: vault-secrets-op-sp
+  appName: cert-manager-bootstrap
+  destination:
+    create: true
+    labels:
+      hvs: "true"
+    name: hcp-cert-manager-bootstrap-authsp
+  refreshAfter: 24h
 EOF
 ```
