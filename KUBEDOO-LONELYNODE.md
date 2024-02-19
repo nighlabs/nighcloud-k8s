@@ -1,22 +1,34 @@
 # Overview
 This is my single node version of a k8s cluster.  I'm using this as a method to refine my skills to work into a larger cluster with HA.  The cluster is deployed on a Proxmox hypervisor.
 
-The goal is to create a cluster which uses Talos Linux, Cilium CNI, Github for storage of configuration, Flux CD for deployment, Rook/Ceph for shared storage, an Ingress (Cilium, Traefik, Envoy, or Nginx), Cert Manager for certificates, and Vault for secret storage.
+The goal is to create a cluster which uses Talos Linux, Cilium CNI, Github for storage of configuration, Argo CD for deployment, Rook/Ceph for shared storage, an Ingress (Cilium, Traefik, Envoy, or Nginx), Cert Manager for certificates, and Vault for secret storage.
+
+The initial Talo cluster installation is handled by Terraform replicatable deployments.
 
 The overall step of what I'm envisioning will take the following steps to create:
 - ✅ Basic deployment
 - ✅ 2 NIC Cards
 - ✅ Github storage for configuration
-- ✅ Install Cilium
-- ✅ Flux CD
-- ✅ Flux CD -> Backport Cilium
-- ✅ Flux CD -> HCP Vault Secrets w/ vault-secrets-operator
-- ✅ Flux CD -> Cilium as L2 Load Balancer
-- ✅ Flux CD -> Ingress (Envoy)
-- ☑️ Flux CD -> Rook Ceph w/ External Ceph
-- ✅ Flux CD -> Cert Manager
-- ☑️ Flux CD -> Vault
-- ☑️ Flux CD -> Cloudflare Tunnels
+- ☑️ Install Cilium
+- ☑️ Argo CD
+- ☑️ Argo CD -> Backport Cilium
+- ☑️ Argo CD -> HCP Vault Secrets w/ vault-secrets-operator
+- ☑️ Argo CD -> Cilium as L2 Load Balancer
+- ☑️ Argo CD -> Ingress (Envoy)
+- ☑️ Argo CD -> Rook Ceph w/ External Ceph
+- ☑️ Argo CD -> Cert Manager
+- ☑️ Argo CD -> Vault
+- ☑️ Argo CD -> Cloudflare Tunnels
+
+## Create the host machines and bootstrap K8s
+- Boot the machine - set it's IP to 172.16.1.41
+- Log into Terraform Cloud: `terraform login`
+- Apply the terraform configuration in terraform/kubedoo-lonelynode: `terraform apply`
+
+# Old/Obsolete Sections
+With FluxCD's company Weaveworks dissolving, I'm rearchitecting with ArgoCD.  As part of that effort, I've taken to using Terraform for the initial cluster configuration and ArgoCD installation.
+
+This has made a lot of the discussions to be a bit obsolete.
 
 ## Secrets discussion
 Overall, there's several styles of secrets for FluxCD: SOPS, Sealed Secrets.  Both SOPS and Sealed Secrets allow you to take files with secrets in them and encrypt/decrypt the sensitive data.  The cypher text is then stored inside of the files before checking them into GitHub.
@@ -25,13 +37,7 @@ I liked the options of those but was still uncomfortable storing secrets encrypt
 
 As a result, I continued searching.  I love Hashicorp Vault as it allows for secure storage of secrets.  However, for the cluster, I end up with a 🐓/🥚 problem in that I can't use Vault if I haven't create the Vault.  Enter Hashicorp Vault Secrets!  It's a cloud platform which offers a key/value store for secrets.  When paired with their secrets operator, the secrets can be synchronized to secrets in k8s.  This allows for secrets separated from the GitHub repo.  The drawback of this philosophy is that there's small parts of the k8s manifests; however, I believe this is a good trade-off to security of the secrets.
 
-## Create the host machines and bootstrap K8s
-- Create a talos configuration for the cluster: `talosctl gen config kubedoo-lonelynode https://172.16.1.40:6443`
-- Create a talos machine configuration: `talosctl machineconfig patch controlplane.yaml --patch @patch-kubedoo-1.yaml -o ./_talos/_out/kubedoo-1.yaml`
-- Boot the machine - set it's IP to 172.16.1.41
-- Apply the machine configuration: `talosctl apply-config --insecure -n 172.16.1.41 --file ./_talos/_out/kubedoo-1.yaml`
-- Bootstrap one of the control plane nodes: `talosctl bootstrap --nodes 172.16.1.41 --endpoints 172.16.1.41 --talosconfig=./talosconfig`
-- Grab the kubeconfig: `talosctl kubeconfig --nodes 172.16.1.40 --endpoints 172.16.1.40 --talosconfig ./talosconfig`
+
 - Install Cilium CNI
 ```
     helm repo add cilium https://helm.cilium.io/

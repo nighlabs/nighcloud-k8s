@@ -4,3 +4,4 @@ talosconfig
 worker.yaml
 **/_out/**
 localdev/**
+**/.terraform

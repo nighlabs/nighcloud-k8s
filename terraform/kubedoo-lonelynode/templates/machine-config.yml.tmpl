@@ -1,0 +1,29 @@
+machine:
+  install:
+    disk: ${install_disk}
+  network:
+    interfaces:
+      - interface: ${mainnet_iface}
+        dhcp: false
+        addresses:
+          - ${mainnet_ip}
+        vip:
+          ip: ${cluster_vip}
+      - interface: ${stornet_iface}
+        dhcp: false
+        addresses:
+          - ${stornet_ip}
+        mtu: ${stornet_mtu}
+    hostname: ${hostname}
+    nameservers:
+        - ${cluster_nameserver}
+cluster:
+  allowSchedulingOnControlPlanes: true
+  etcd:
+    advertisedSubnets:
+      - ${cluster_advertisedsubnets}
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true      
