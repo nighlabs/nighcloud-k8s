@@ -9,7 +9,7 @@ The overall step of what I'm envisioning will take the following steps to create
 - ✅ Basic deployment
 - ✅ 2 NIC Cards
 - ✅ Github storage for configuration
-- ☑️ Install Cilium
+- ✅ Install Cilium
 - ☑️ Argo CD
 - ☑️ Argo CD -> Backport Cilium
 - ☑️ Argo CD -> HCP Vault Secrets w/ vault-secrets-operator

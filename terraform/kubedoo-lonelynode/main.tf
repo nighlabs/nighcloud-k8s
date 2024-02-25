@@ -13,6 +13,19 @@ data "talos_client_configuration" "this" {
   endpoints            = [for k, v in var.node_data.controlplanes : k]
 }
 
+data "helm_template" "cilium" {
+  name       = "cilium"
+
+  repository = "https://helm.cilium.io/"
+  chart      = "cilium"
+  version    = "v1.14.7"
+  namespace  = "kube-system"
+
+  values = [
+    file("${path.module}/files/cilium-values.yaml")
+  ]
+} 
+
 resource "talos_machine_configuration_apply" "controlplane" {
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
@@ -47,8 +60,19 @@ data "talos_cluster_kubeconfig" "this" {
   node                 = var.cluster_vip
 }
 
+resource "kubectl_manifest" "cilium" {
+  depends_on          = [data.talos_cluster_kubeconfig.this]
+
+  for_each            = {
+    for k, v in data.helm_template.cilium.manifests : k => v
+    if k!="templates/cilium-secrets-namespace.yaml"
+  }
+
+  yaml_body           = each.value
+}
+
 data "talos_cluster_health" "this" {
-  depends_on            = [data.talos_cluster_kubeconfig.this]
+  depends_on            = [kubectl_manifest.cilium]
   client_configuration  = talos_machine_secrets.this.client_configuration
   control_plane_nodes   = [for k, v in var.node_data.controlplanes : k]
   endpoints             = [for k, v in var.node_data.controlplanes : k]
