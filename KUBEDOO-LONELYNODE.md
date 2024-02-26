@@ -10,10 +10,10 @@ The overall step of what I'm envisioning will take the following steps to create
 - ✅ 2 NIC Cards
 - ✅ Github storage for configuration
 - ✅ Install Cilium
+- ✅ -> Cilium as L2 Load Balancer
 - ☑️ Argo CD
 - ☑️ Argo CD -> Backport Cilium
 - ☑️ Argo CD -> HCP Vault Secrets w/ vault-secrets-operator
-- ☑️ Argo CD -> Cilium as L2 Load Balancer
 - ☑️ Argo CD -> Ingress (Envoy)
 - ☑️ Argo CD -> Rook Ceph w/ External Ceph
 - ☑️ Argo CD -> Cert Manager

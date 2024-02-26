@@ -35,3 +35,8 @@ cgroup:
   hostRoot: /sys/fs/cgroup
 k8sServiceHost: localhost
 k8sServicePort: 7445
+l2announcements:
+  enabled: true
+k8sClientRateLimit:
+  qps: 5 # Default - tune later if needed
+  burst: 10 # Default - tune later if needed
