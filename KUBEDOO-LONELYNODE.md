@@ -6,14 +6,18 @@ The goal is to create a cluster which uses Talos Linux, Cilium CNI, Github for s
 The initial Talo cluster installation is handled by Terraform replicatable deployments.
 
 The overall step of what I'm envisioning will take the following steps to create:
+Manual Deployment:
 - ✅ Basic deployment
 - ✅ 2 NIC Cards
 - ✅ Github storage for configuration
+Terraform Deployment:
 - ✅ Install Cilium
-- ✅ -> Cilium as L2 Load Balancer
+- ✅ Cilium as L2 Load Balancer
+- ☑️ Install Secret Bootstrap (Secret Storage CSI w/ GCP or HCP Vault Secrets)
+- ☑️ Install Storage CSI
 - ☑️ Argo CD
-- ☑️ Argo CD -> Backport Cilium
-- ☑️ Argo CD -> HCP Vault Secrets w/ vault-secrets-operator
+- ☑️ Create Argo Project/Application Config
+ArgoCD Deployment:
 - ☑️ Argo CD -> Ingress (Envoy)
 - ☑️ Argo CD -> Rook Ceph w/ External Ceph
 - ☑️ Argo CD -> Cert Manager
