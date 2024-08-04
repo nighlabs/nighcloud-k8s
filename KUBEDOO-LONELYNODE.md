@@ -13,7 +13,7 @@ Manual Deployment:
 Terraform Deployment:
 - ✅ Install Cilium
 - ✅ Cilium as L2 Load Balancer
-- ☑️ Install Secret Bootstrap (Secret Storage CSI w/ GCP or HCP Vault Secrets)
+- ☑️ Install Secret Storage & Bootstrap (Secret Storage CSI w/ GCP or HCP Vault Secrets)
 - ☑️ Install Storage CSI
 - ☑️ Argo CD
 - ☑️ Create Argo Project/Application Config
